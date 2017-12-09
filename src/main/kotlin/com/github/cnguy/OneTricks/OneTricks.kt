@@ -31,13 +31,16 @@ class ReadyListener: EventListener {
 
 class MessageListener: ListenerAdapter() {
     override fun onMessageReceived(event: MessageReceivedEvent?) {
-        if (event!!.isFromType(ChannelType.PRIVATE)) {
-            println("[PM] ${event.author.name}: ${event.message.content}")
+        val messageContent = event!!.message.content
+        if (event.isFromType(ChannelType.PRIVATE)) {
+            val username = event.author.name
+            println("[PM] $username: $messageContent")
         } else {
-            println(
-                    "[${event.guild.name}][${event.textChannel?.name}]" +
-                    " ${event.member.effectiveName}: ${event.message?.content}"
-            )
+            val guildName = event.guild.name
+            val textChannelName = event.textChannel.name
+            val prefix = "[$guildName][$textChannelName]"
+            val body = "${event.member.effectiveName}: $messageContent"
+            println("$prefix $body")
         }
     }
 }
